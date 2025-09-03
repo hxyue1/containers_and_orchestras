@@ -1,10 +1,11 @@
+# PostgreSQL StatefulSet
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: postgres-db
 spec:
-  serviceName: "postgresi-db"
-  replicas: 3
+  serviceName: postgres-db-service
+  replicas: 1
   selector:
     matchLabels:
       app: postgres-db
@@ -19,6 +20,11 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /var/lib/postgresql/data
+        env:
+        - name: POSTGRES_PASSWORD
+          value: testpassword
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
   volumeClaimTemplates:
   - metadata:
       name: data
@@ -27,5 +33,4 @@ spec:
       resources:
         requests:
           storage: 10Gi
-      storageClassName: standard-ssd
         
