@@ -20,17 +20,11 @@ spec:
         volumeMounts:
         - name: data
           mountPath: /var/lib/postgresql/data
-        - name: init-sql
-          mountPath: /docker-entrypoint-initdb.d/
         env:
         - name: POSTGRES_PASSWORD
           value: testpassword
         - name: PGDATA
           value: /var/lib/postgresql/data/pgdata
-      volumes:
-        - name: init-sql
-          configMap:
-            name: init-sql
   volumeClaimTemplates:
   - metadata:
       name: data
@@ -40,3 +34,7 @@ spec:
         requests:
           storage: 10Gi
         
+# Helpful commands for debugging
+# kubectl scale statefulset postgres-db --replicas=0 && kubectl delete statefulset postgres-db && kubectl delete pvc data-postgres-db-0
+# kubectl apply -f statefulset/postgres-statefulset.yaml && kubectl get pods -A
+# kubectl exec -it postgres-db-0 -- /bin/bash
