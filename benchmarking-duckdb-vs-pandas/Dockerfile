@@ -10,8 +10,10 @@ RUN pip install --no-cache-dir \
     duckdb \
     pandas \
     pyarrow \
-    psutil \
+    psutil
 
-COPY benchmark.py .
+WORKDIR /app
+COPY benchmark.py get_ny_taxi.sh ./
+RUN chmod +x get_ny_taxi.sh
 
-CMD ["python", "benchmark.py"]
+CMD ["/bin/bash", "-c", "./get_ny_taxi.sh && python benchmark.py"]
