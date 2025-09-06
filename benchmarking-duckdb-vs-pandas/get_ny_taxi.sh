@@ -5,7 +5,7 @@ set -euo pipefail
 BASE_URL="https://d37ci6vzurychx.cloudfront.net/trip-data"
 YEAR="2024"
 MONTH_NUMBERS=(01 02 03 04 05 06 07 08 09 10 11 12)
-TAXI_TYPES=("yellow" "green" "fhv" "hvfhv")
+TAXI_TYPES=("yellow" "green")
 DATA_DIR="./data"
 
 mkdir -p "${DATA_DIR}"
