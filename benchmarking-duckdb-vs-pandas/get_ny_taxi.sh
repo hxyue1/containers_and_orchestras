@@ -10,6 +10,7 @@ DATA_DIR="./data"
 
 mkdir -p "${DATA_DIR}"
 
+echo "Starting downloads"
 for MONTH_NUMBER in "${MONTH_NUMBERS[@]}"; do
     for TAXI_TYPE in "${TAXI_TYPES[@]}"; do
         FILENAME="${TAXI_TYPE}_tripdata_${YEAR}-${MONTH_NUMBER}.parquet"
