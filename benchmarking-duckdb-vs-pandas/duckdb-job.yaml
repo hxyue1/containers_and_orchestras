@@ -6,8 +6,16 @@ spec:
   template:
     spec:
       containers:
-      - name: python
-        image: python:3.11-slim
-        command: ["python", -c, "print('Hello World')"]
-      restartPolicy: Never
-  backoffLimit: 4
+      - name: duckdb-vs-pandas
+        image: hxyue1/duckdb-vs-pandas:latest
+        # imagePullPolicy: IfNotPresent
+        command: ["/bin/bash", "-c", "./get_ny_taxi.sh && python benchmark.py"]
+        volumeMounts:
+        - name: data
+          mountPath: /app/data
+      restartPolicy: OnFailure
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: duckdb-pvc
+  backoffLimit: 3
