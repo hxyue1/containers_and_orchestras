@@ -45,19 +45,29 @@ def benchmark_duckdb(data_paths):
     print(f"DuckDB took {elapsed:.2f}s and consumed {rss_mb:.2f} MB of memory\n", flush=True)
 
 def run(data_dir):
-    data_paths = []
-    # should be range(1,13, but for some reason if I go above 11, the pandas output doesn't print
-    for month in range(1,11):
-        for taxi_type in ["yellow", "green"]:
-            month_str = str(month).zfill(2)
-            data_paths.append(os.path.join(data_dir, f"{taxi_type}_tripdata_2024-{month_str}.parquet"))
-
     print("Group by + Aggregation: Pandas vs DuckDB\n", flush=True)
-    p1=Process(target=benchmark_pandas, args=(data_paths,))
-    p2=Process(target=benchmark_duckdb, args=(data_paths,))
-    p1.start()
-    p1.join()
-    p2.start()
+    for end_month in range(2,13):
+        data_paths = []
+        # trying with larger and large collections of data
+        for month in range(1, end_month):
+            for taxi_type in ["yellow", "green"]:
+                month_str = str(month).zfill(2)
+                data_paths.append(os.path.join(data_dir, f"{taxi_type}_tripdata_2024-{month_str}.parquet"))
+        print(f"Running benchmark with {end_month-1} month{'s' if end_month-1!=1 else ''} of data\n")
+        p1=Process(target=benchmark_pandas, args=(data_paths,))
+        p2=Process(target=benchmark_duckdb, args=(data_paths,))
+        p1.start()
+        p1.join()
+        if p1.exitcode != 0:
+            if p1.exitcode == -9:
+                print("Pandas benchmark process was forcefully terminated\n")
+            else:
+                print("Pandas benchmark failed\n")
+        p2.start()
+        p2.join()
+        if p1.exitcode != 0:
+            print("Exiting program due to Pandas benchmark failure")
+            return
 
 if __name__ == "__main__":
     data_dir = "data"
