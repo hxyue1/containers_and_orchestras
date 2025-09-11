@@ -10,7 +10,7 @@ DATA_DIR="./data"
 
 mkdir -p "${DATA_DIR}"
 
-echo "Starting downloads"
+echo -e "\nStarting downloads:\n"
 for MONTH_NUMBER in "${MONTH_NUMBERS[@]}"; do
     for TAXI_TYPE in "${TAXI_TYPES[@]}"; do
         FILENAME="${TAXI_TYPE}_tripdata_${YEAR}-${MONTH_NUMBER}.parquet"
@@ -25,6 +25,6 @@ for MONTH_NUMBER in "${MONTH_NUMBERS[@]}"; do
         curl -fsL -# "${URL}" -o "${OUTPUT_PATH}" && echo "${FILENAME} downloaded"
         done
     done
-echo "All files downloaded"
+echo -e "\nAll files downloaded\n"
 
 
